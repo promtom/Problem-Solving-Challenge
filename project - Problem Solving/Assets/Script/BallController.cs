@@ -9,6 +9,11 @@ public class BallController : MonoBehaviour
     // Besarnya gaya awal yang diberikan untuk mendorong bola
     public float xInitialForce;
     public float yInitialForce;
+    // Titik asal lintasan bola saat ini
+    // private Vector2 trajectoryOrigin;
+    
+    private int starting = 0;
+    Vector2 keeper; //mengingat velonvity awal
     
     // Start is called before the first frame update
     void Start()
@@ -35,18 +40,34 @@ public class BallController : MonoBehaviour
 
     void PushBall()
     {
-         float yRandomInitialForce = Random.Range(-yInitialForce, yInitialForce);
+        Vector2 newDirect;
 
-        // Tentukan nilai acak antara 0 (inklusif) dan 2 (eksklusif)
-        float randomDirection = Random.Range(0, 2);
+        //starting force
+        if (starting <= 0) { 
+            // float yRandomInitialForce = Random.Range(-yInitialForce, yInitialForce);
+            // Tentukan nilai acak antara 0 (inklusif) dan 2 (eksklusif)
+            float randomDirection = Random.Range(0, 2);
 
-        // Jika nilainya di bawah 1, bola bergerak ke kiri. 
-        // Jika tidak, bola bergerak ke kanan.
-        if (randomDirection < 1.0f)
-            rigidBody2D.AddForce(new Vector2(-xInitialForce, yRandomInitialForce));
+            // -1 = kiri 
+            if (randomDirection < 1.0f)
+                newDirect = new Vector2(-xInitialForce, yInitialForce);
+            else
+                newDirect = new Vector2(xInitialForce, yInitialForce);
+
+            //simpen nilai
+            keeper = newDirect; starting++;
+        }
+        //counter
         else
-            rigidBody2D.AddForce(new Vector2(xInitialForce, yRandomInitialForce));
-        
+        {
+            float yDirection = Random.Range(-yInitialForce, yInitialForce);
+            float xDirection = Random.Range(-xInitialForce, xInitialForce);
+            Vector2 tmpDirect = new Vector2(xDirection, -yInitialForce); // buat arah baru
+            Vector2 newVel = keeper.magnitude * tmpDirect.normalized; //kecepatan awal dengan arah baru
+            newDirect = new Vector2(newVel.x,newVel.y);
+        }
+
+        rigidBody2D.AddForce(newDirect);
     }   
     void RestartGame()
     {
@@ -54,5 +75,10 @@ public class BallController : MonoBehaviour
         ResetBall();
         // Setelah 2 detik, berikan gaya ke bola
         Invoke("PushBall", 2);
+    }
+    // Ketika bola beranjak dari sebuah tumbukan, rekam titik tumbukan tersebut
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        
     }
 }
