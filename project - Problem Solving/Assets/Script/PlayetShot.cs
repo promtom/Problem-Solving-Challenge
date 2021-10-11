@@ -28,7 +28,7 @@ public class PlayetShot : MonoBehaviour
     {
         targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         targetPosition.z = transform.position.z;
-        Debug.Log("TARGET LOCK");
+        Debug.Log("TARGET LOCK = " + Input.mousePosition);
         isMoving = true;
     }
 

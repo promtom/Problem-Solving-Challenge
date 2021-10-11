@@ -79,6 +79,6 @@ public class BallController : MonoBehaviour
     // Ketika bola beranjak dari sebuah tumbukan, rekam titik tumbukan tersebut
     private void OnCollisionExit2D(Collision2D collision)
     {
-        
+        //
     }
 }
