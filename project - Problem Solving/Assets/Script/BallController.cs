@@ -11,6 +11,8 @@ public class BallController : MonoBehaviour
     public float yInitialForce;
     // Titik asal lintasan bola saat ini
     // private Vector2 trajectoryOrigin;
+
+    public ScoreManager skor;
     
     private int starting = 0;
     Vector2 keeper; //mengingat velonvity awal
@@ -74,11 +76,16 @@ public class BallController : MonoBehaviour
         // Kembalikan bola ke posisi semula
         ResetBall();
         // Setelah 2 detik, berikan gaya ke bola
-        Invoke("PushBall", 2);
+        Invoke("PushBall", 1);
     }
     // Ketika bola beranjak dari sebuah tumbukan, rekam titik tumbukan tersebut
     private void OnCollisionExit2D(Collision2D collision)
     {
-        //
+        
+        if (collision.gameObject.tag == "enemy")
+        {
+            skor.AddScore(1);
+            Destroy(collision.gameObject);
+        }
     }
 }
