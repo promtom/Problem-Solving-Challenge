@@ -27,22 +27,7 @@ public class EnemyGenerator : MonoBehaviour
         spawnPoint.Add(new Vector2(0, 0)); //add to list
         for (int i = 0; i < enemyCount; i++)
         {
-            for (int j = 0; j <= i;)
-            {
-                float posX = Random.Range((-mapSize.x / 2) + offsetArea.x, (mapSize.x / 2) - offsetArea.x);
-                float posY = Random.Range((-mapSize.y / 2) + offsetArea.y, (mapSize.y / 2) - offsetArea.y);
-                
-                Debug.Log("Reques in position (" + posX + ", " + posY + ") to index [" + i + "]");
-                if (spawnPoint[j].x != posX && spawnPoint[j].y != posY)
-                {
-                    Debug.Log("Request sukses");
-                    TranceEnemy(posX, posY);
-                    j++; break;
-                }
-                else Debug.Log("Request ditolak");
-            }
-
-            Debug.Log("============");
+            Tracing(i);
         }
         
     }
@@ -59,6 +44,21 @@ public class EnemyGenerator : MonoBehaviour
         //Vector2 totalSize = (sizeEnemy + offsetEnemy) * (size - Vector2.one);
     }
 
+    private void Tracing(int i)
+    {
+        for (int j = 0; j <= i;)
+        {
+            float posX = Random.Range((-mapSize.x / 2) + offsetArea.x, (mapSize.x / 2) - offsetArea.x);
+            float posY = Random.Range((-mapSize.y / 2) + offsetArea.y, (mapSize.y / 2) - offsetArea.y);
+            
+            if (spawnPoint[j].x != posX && spawnPoint[j].y != posY)
+            {
+                TranceEnemy(posX, posY);
+                j++; break;
+            }
+        }
+    }
+
     private void TranceEnemy(float posX, float posY)
     {
         GameObject newEnemy = Instantiate
@@ -70,4 +70,19 @@ public class EnemyGenerator : MonoBehaviour
         spawnedEnemy.Add(newEnemy); //add to list
         spawnPoint.Add(new Vector2(posX, posY)); //add to list
     }
+
+    public void ReTrance(float oldX, float oldY)
+    {
+        while (true)
+        {
+            float posX = Random.Range((-mapSize.x / 2) + offsetArea.x, (mapSize.x / 2) - offsetArea.x);
+            float posY = Random.Range((-mapSize.y / 2) + offsetArea.y, (mapSize.y / 2) - offsetArea.y);
+            if (posX != oldX && posY != oldY)
+            {
+                TranceEnemy(posX, posY);
+                break;
+            }
+        }
+    }
+
 }

@@ -11,12 +11,14 @@ public class BallController : MonoBehaviour
     public float yInitialForce;
     // Titik asal lintasan bola saat ini
     // private Vector2 trajectoryOrigin;
-
-    public ScoreManager skor;
     
     private int starting = 0;
     Vector2 keeper; //mengingat velonvity awal
     
+    //ini akan dipindahkan ke gamemaneger
+    public ScoreManager skor;
+    public EnemyGenerator TraceON;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -86,6 +88,17 @@ public class BallController : MonoBehaviour
         {
             skor.AddScore(1);
             Destroy(collision.gameObject);
+
+            StartCoroutine(delayKeneksi());
         }
+    }
+
+    private IEnumerator delayKeneksi()
+    {
+        yield return new WaitForSeconds(3);
+
+        float getX = transform.position.x;
+        float getY = transform.position.y;
+        TraceON.ReTrance(getX, getY);
     }
 }
